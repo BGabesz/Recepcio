@@ -1,0 +1,62 @@
+@charset "utf-8";
+#szemelyMegjelenites {
+  /* padding: 30px; */
+  position: fixed;
+  right: 0;
+  top:60px;
+}
+#kep img {
+  width: 100px;
+}
+article {
+  display: flex;
+  /* border-bottom: 3px solid #cc0000; */
+  color: white;
+}
+article table {
+  overflow: hidden;
+  color: white;
+}
+article table td {
+  white-space: nowrap;
+}
+#szemelyMegjelenites table {
+  height: 100%;
+}
+article table {
+  border-collapse: collapse;
+}
+article table td {
+  text-align: center;
+}
+article .bal table {
+  border-radius: 10px 0 0 10px;
+}
+article .jobbTablazatSzekreny table {
+  border-radius: 0 10px 10px 0;
+}
+
+article table th,
+article table td {
+  padding: 12px 15px;
+}
+article table thead tr {
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+}
+
+article table tbody tr {
+  background-color: #dadada;
+}
+article table tbody {
+  color: black;
+}
+article table tbody tr {
+  border-bottom: 1px solid #bdbdbd;
+}
+article table tbody td,
+article table thead th {
+  border: 1px solid black;
+}

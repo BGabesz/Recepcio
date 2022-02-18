@@ -1,0 +1,113 @@
+@charset "utf-8";
+body{
+    background-color: #FDF5E6;
+}
+main{
+    width:100%;
+    margin: auto;
+    padding: auto;
+    display: grid;
+    grid-template-areas: 
+    "h h n n n n"
+    "a a a a a a"
+    "s s s s s s"
+    "f f f f f f"
+}
+header{
+    grid-area:h;
+}
+nav{
+    grid-area:n;
+}
+article{
+    grid-area:a;
+}
+section{
+    grid-area:s;
+}
+footer{
+    grid-area:f;
+}
+header{
+    
+    border: 2px solid black;
+    /* background-color: black; */
+    /* text-align: left; */
+    font-family: 'Gill Sans';
+    font-size: 30px;
+}
+header h1{
+    display:inline;
+    border: 2px solid red;
+    /* max-width: 100%; */
+    /* margin: 10px; */
+    color: #cc0000;
+}
+nav ul li{
+    display:inline;
+    text-align: center;
+}
+nav{
+    border: 2px solid rgb(255, 0, 0);
+    /* text-align: right; */
+    /* background-color: black; */
+}
+nav ul li{
+    display:inline;
+    margin: 10px;
+}
+nav ul li a{
+    display:inline;
+    padding:10px;
+    border-radius:5px;
+    background-color: black;
+    list-style-type: none;
+    font-size: 30px;
+    color:#cc0000;
+    text-decoration:none;
+    font-family:'Abril Fatface';
+    
+}
+nav ul li a:hover {
+    background-color: #cc0000; 
+    color: black;
+    border: 2px solid black;
+  }
+article{
+    background-color: rgb(224, 224, 224);
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    text-align: center;
+}
+article h3, span{
+    
+    margin:10px;
+    font-size: 30;
+    display:inline;
+}
+section{
+    margin: 10px;
+}
+#JelenlegiFoglaltSzekrenyek{
+    font-size: 20px;
+    
+}
+table{
+    background-color: blanchedalmond;
+}
+footer{
+    text-align: center;
+}
+section h3{
+    font-size:30px;
+    text-align: center;
+}
+#kereses h4, input,button {
+    display:inline;
+}
+button{
+    cursor: pointer;
+}
+table tr th img{
+    max-width: 60px;
+}

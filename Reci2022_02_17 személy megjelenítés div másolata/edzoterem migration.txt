@@ -1,0 +1,285 @@
+	composer create-project --prefer-dist laravel/laravel Edzoterem(v0.0)
+	cd Edzoterem(v0.0)
+
+inditás: php artisan serve -> http://127.0.0.1:8000/
+
+Adatbázis létrehozása phpmyadmin -nal: Edzoterem(v0.0)
+(DB_DATABASE=Edzoterem(v0.0)) 
+
+php artisan make:model Jogosultasg -m
+php artisan make:model Szemely -m
+php artisan make:model Ugyfel_edzes -m
+php artisan make:model Munkaido -m
+php artisan make:model Izomcsoport -m
+php artisan make:model Terem -m
+php artisan make:model Eszkoz_tipus -m
+php artisan make:model Eszkoz -m
+php artisan make:model Gyakorlat -m
+php artisan make:model Eszkoztar -m
+php artisan make:model Edzo_idopont -m
+php artisan make:model Szekeny -m
+php artisan make:model Oltozofoglalas -m
+php artisan make:model Berlet_tipus -m
+php artisan make:model Arvaltozas -m
+php artisan make:model Berlet -m
+
+
+	php artisan migrate
+
+
+
+Adatok feltöltése a táblákba:
+
+Jogosultsag {jogosultsag_id, nev}  
+	
+	//fő kulcs
+        $table->increments('jogosultsag_id');	
+
+	$table->string('nev');
+        $table->timestamps();
+
+
+
+Személy {személy_id, jogosultság_id, emailcim, jelszó, név, szül_dátum, neme, igazolvány_száma, igazolvány_típusa, kép}
+
+	$table->increments('szemely_id'); 		
+
+increments ha magatol léptessen
+integer ha én akarom beírni az id-t és + ->primary()
+
+	$table->integer('jogosultsag_id')->unsigned(); 		
+	$table->index('jogosultsag_id');
+	$table->foreign('jogosultsag_id')->references('jogosultsag_id')->on('jogosultasgs');
+
+első sor a hivatkozás kulcs típusa,
+második sor felveszem indexként/ másodlagos kulcsként
+harmadik sor foreign(index)->references(hivatkozo tábla kulcsa)->on(tabla neve);
+
+	$table->string('email_cim');
+	$table->string('jelszo');
+	$table->string('nev');
+	$table->date('szul_datum');
+	$table->string('neme');
+	$table->string('igazolvany_szam');
+	$table->string('igazolvany_tipusa');
+	$table->string('kep');
+        $table->timestamps();
+
+
+Ügyfel_edzés{ugyfel, terem_id, belepes_datum_ido, kilepes_datum_ido}
+	
+	//külső kulcs
+        $table->integer('edzo')->unsigned();		
+	$table->foreign('edzo')->references('szemely_id')->on('szemelies');
+
+        //külső kulcs
+	$table->integer('ugyfel')->unsigned();		
+	$table->foreign('ugyfel')->references('szemely_id')->on('szemelies');
+            
+	$table->datetime('datum');
+	$table->time('ora');
+	$table->timestamps();
+
+
+
+Munkaidő {dolgozó, mettől, meddig}
+
+	//külső kulcs
+        $table->integer('dolgozo')->unsigned();	
+	$table->foreign('dolgozo')->references('szemely_id')->on('szemelies');	
+            	
+	$table->datetime('mettol');
+	$table->datetime('meddig');
+        $table->timestamps();
+
+
+Izomcsoport {izomcsoport_id, megnevezés, ábra} 
+	
+	//fő kulcs
+        $table->increments('izomcsoport_id');
+            
+	$table->string('megnevezes');
+	$table->string('abra');
+	$table->timestamps();
+
+
+Terem {terem_id,terem_neve ,ferfi_férőhely, noi_férőhely, nyitas, zaras}
+
+	//fő kulcs
+        $table->increments('terem_id');
+            
+	$table->string('terem_neve');
+	$table->integer('ferfi_ferohely');
+	$table->integer('noi_ferohely');
+	$table->datetime('nyitas');
+	$table->datetime('zaras');
+	$table->timestamps();
+
+
+Eszköz_tipus{eszkoz_id, qr_kod, eszkoz_neve, súly}
+
+    	    $table->increments('eszkoz_tipus_szamlalo');
+            $table->string('eszkoz_neve');
+            $table->integer('suly');
+            $table->string('kep');
+            $table->string('leiras');
+            $table->timestamps();
+
+Eszköz{eszkoz_id, qr_kod, eszkoz_neve, súly}
+
+	//fő kulcs
+         $table->increments('eszkoz_id');
+         $table->integer('eszkoz_tipus_szamlalo')->unsigned();
+         $table->foreign('eszkoz_tipus_szamlalo')->references('eszkoz_tipus_szamlalo')->on('eszkoz_tipuses');
+         $table->integer('terem_id')->unsigned();
+         $table->foreign('terem_id')->references('terem_id')->on('terems');
+
+         $table->string('qr_kod');
+	 $table->timestamps();
+
+
+Gyakorlat {eszköz_id ,izomcsoport_id, megnevezés, videó, leírás, szint}
+	
+	//külső kulcs
+        $table->integer('eszkoz_tipus_szamlalo')->unsigned();		
+	$table->foreign('eszkoz_tipus_szamlalo')->references('eszkoz_tipus_szamlalo')->on('eszkozs');
+
+        //külső kulcs
+	$table->integer('izomcsoport_id')->unsigned();		
+	$table->foreign('izomcsoport_id')->references('izomcsoport_id')->on('izomcsoports');
+
+	$table->string('megnevezes');
+	$table->string('video');
+	$table->string('leiras');
+	$table->integer('szint');
+	$table->timestamps();
+
+
+
+
+
+Eszköztár {terem_id, eszkoz_id, dbszam}  
+	
+	 //külső kulcs
+         $table->integer('terem_id')->unsigned();		
+	 $table->foreign('terem_id')->references('terem_id')->on('terems');
+
+         //külső kulcs
+	 $table->integer('eszkoz_tipus_szamlalo')->unsigned();		
+	 $table->foreign('eszkoz_tipus_szamlalo')->references('eszkoz_tipus_szamlalo')->on('eszkozs');
+
+	 $table->integer('dbszam');
+	 $table->timestamps();
+
+
+
+Edző_időpont {edzo, ugyfel, datum, ora}
+	
+	//külső kulcs
+        $table->integer('ugyfel')->unsigned();		
+	$table->foreign('ugyfel')->references('szemely_id')->on('szemelies');
+
+        //külső kulcs
+	$table->integer('terem_id')->unsigned();		
+	$table->foreign('terem_id')->references('terem_id')->on('terems');
+
+	$table->datetime('belepes_datum_ido');
+	$table->datetime('kilepes_datum_ido');
+	$table->timestamps();
+
+
+
+Szekrény {szekrény_id, üres-e}
+
+	//fő kulcs
+        $table->increments('szekreny_id');
+            
+	$table->string('ures_e');
+	$table->string('tipusa');
+	$table->timestamps();
+
+
+Öltözüfoglalás {oltozofig_id, szekreny_id, ügyfél, típusa, datum}
+
+	 //fő kulcs
+         $table->increments('oltozofog_id');
+
+         //külső kulcs
+	 $table->integer('szekreny_id')->unsigned();
+	 $table->foreign('szekreny_id')->references('szekreny_id')->on('szekenies');
+
+         //külső kulcs
+	 $table->integer('ugyfel')->unsigned();		
+	 $table->foreign('ugyfel')->references('szemely_id')->on('szemelies');
+            
+	 
+	 $table->datetime('datum');
+	 $table->timestamps();
+
+
+Bérlet_tipus{berlet_típus_id, megnevezes, idotartam_nap, ár} 
+
+	 //fő kulcs
+         $table->increments('berlet_tipus_id');		
+
+	 $table->string('megnevezes');
+	 $table->string('idotartam_nap');
+	 $table->integer('ár');
+	 $table->timestamps();
+
+
+Árváltozás {árváltozás_id, bélet_típus_id, régi_ár, uj_ár, mettől, meddig}
+
+	//fő kulcs
+        $table->increments('arvaltozas_id');			
+            	
+        $table->integer('berlet_tipus_id')->unsigned();
+        $table->foreign('berlet_tipus_id')->references('berlet_tipus_id')->on('berlet_tipuses');
+
+        $table->integer('regi_ar');
+        $table->integer('uj_ar');
+        $table->datetime('mettol');
+        $table->datetime('meddig');
+        $table->timestamps();
+
+
+
+
+
+
+
+Bérlet {berlet_típus_id, ügyfél, datum_tol, datum_ig}
+
+	//külső kulcs
+        $table->integer('berlet_tipus_id')->unsigned();		
+	$table->foreign('berlet_tipus_id')->references('berlet_tipus_id')->on('berlet_tipuses');;	
+            
+        //külső kulcs
+	$table->integer('ugyfel')->unsigned();		
+	$table->foreign('ugyfel')->references('szemely_id')->on('szemelies');	
+            
+	$table->datetime('datum_tol');
+	$table->datetime('datum_ig');
+        $table->timestamps();
+
+
+
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082515_create_jogosultasgs_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082506_create_szemelies_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082723_create_ugyfel_edzes_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082526_create_munkaidos_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082710_create_izomcsoports_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082704_create_eszkozs_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082717_create_gyakorlats_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082605_create_terems_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082658_create_eszkoztars_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082730_create_edzo_idoponts_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082651_create_szekenies_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082612_create_oltozofoglalas_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082551_create_arvaltozas_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082544_create_berlet_tipuses_table.php 
+php artisan migrate:refresh --path=database/migrations/2022_01_20_082537_create_berlets_table.php 
+
+
+
+
